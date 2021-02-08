@@ -47,8 +47,8 @@ defmodule CanvasApp.Core.DrawerTest do
         width: 5,
         height: 3,
         coordinates: {3,2},
-        outline: "@",
-        fill: "X"
+        outline_symbol: "@",
+        fill_symbol: "X"
       }
       rectangle1 = RectangleFactory.build(rectangle_params1)
 
@@ -56,8 +56,8 @@ defmodule CanvasApp.Core.DrawerTest do
         width: 14,
         height: 6,
         coordinates: {10, 3},
-        outline: "X",
-        fill: "O"
+        outline_symbol: "X",
+        fill_symbol: "O"
       }
 
       rectangle2 = RectangleFactory.build(rectangle_params2)
@@ -78,22 +78,22 @@ defmodule CanvasApp.Core.DrawerTest do
         coordinates: {14, 0},
         width: 7,
         height: 6,
-        outline: nil,
-        fill: "."
+        outline_symbol: nil,
+        fill_symbol: "."
       }
       rectangle_params2 = %{
         coordinates: {0, 3},
         width: 8,
         height: 4,
-        outline: "O",
-        fill: nil
+        outline_symbol: "O",
+        fill_symbol: nil
       }
       rectangle_params3 = %{
         coordinates: {5, 5},
         width: 5,
         height: 3,
-        outline: "X",
-        fill: "X"
+        outline_symbol: "X",
+        fill_symbol: "X"
       }
       rectangle1 = RectangleFactory.build(rectangle_params1)
       rectangle2 = RectangleFactory.build(rectangle_params2)
@@ -118,22 +118,22 @@ defmodule CanvasApp.Core.DrawerTest do
       coordinates: {14, 0},
       width: 7,
       height: 6,
-      outline: nil,
-      fill: "."
+      outline_symbol: nil,
+      fill_symbol: "."
     }
     rectangle_params2 = %{
       coordinates: {0, 3},
       width: 8,
       height: 4,
-      outline: "O",
-      fill: nil
+      outline_symbol: "O",
+      fill_symbol: nil
     }
     rectangle_params3 = %{
       coordinates: {5, 5},
       width: 5,
       height: 3,
-      outline: "X",
-      fill: "X"
+      outline_symbol: "X",
+      fill_symbol: "X"
     }
 
     rectangle1 = RectangleFactory.build(rectangle_params1)

@@ -8,7 +8,8 @@ defmodule CanvasApp.Model.Canvas do
 
   typedstruct enforce: true do
     field :id, UUID.t()
-    field :rectangles, [Rectangle.t()], default: []
+    field :rectangles, [Rectangle.t()]
+    field :flood_symbol, String.t(), enforce: false
   end
 
   @spec new(%{required(:rectangles) => [map()]}) :: {:ok, __MODULE__.t()} | {:error, Error.ValidationError.t()}

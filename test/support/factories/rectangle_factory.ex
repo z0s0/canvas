@@ -9,8 +9,8 @@ defmodule CanvasApp.Model.RectangleFactory do
       width: Enum.random(1..10),
       height: Enum.random(1..10),
       coordinates: {Enum.random(1..5), Enum.random(1..5)},
-      outline: Enum.random(~w(| @ . & -)),
-      fill: Enum.random(~W(| @ . & =))
+      outline_symbol: Enum.random(~w(| @ . & -)),
+      fill_symbol: Enum.random(~W(| @ . & =))
     }
 
     {:ok, rectangle} = Rectangle.new(arbitrary_params)

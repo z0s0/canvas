@@ -5,7 +5,7 @@ defmodule CanvasApp.Model.RectangleTest do
 
   describe "new/1" do
     test "returns {:ok, %Rectangle{} if params are valid" do
-      params = %{width: 5, height: 3, coordinates: {1, 1}, fill: "|", outline: "@"}
+      params = %{width: 5, height: 3, coordinates: {1, 1}, fill_symbol: "|", outline_symbol: "@"}
       assert {:ok, %Rectangle{}} = Rectangle.new(params)
     end
 

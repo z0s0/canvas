@@ -1,23 +1,21 @@
 defmodule CanvasApp.Core.Drawer do
   alias CanvasApp.Core.Error
-  alias CanvasApp.Model.{Canvas, Rectangle}
+  alias CanvasApp.Model.Canvas
 
   @spec draw(Canvas.t()) :: {:ok, map()} | {:error, Core.Error.t()}
   def draw(canvas) do
     grid = setup_empty_grid(canvas.rectangles)
 
-    Enum.reduce(canvas.rectangles, grid, fn rectangle, grid ->
-      draw_rectangle_on_grid(rectangle, grid)
-    end)
-    |> grid_to_string()
-  end
+    grid_with_rectangles_painted =
+      Enum.reduce(canvas.rectangles, grid, fn rectangle, grid ->
+        draw_rectangle_on_grid(rectangle, grid)
+      end)
 
-  @doc """
-    converts any canvas(complete | incomplete) to string representation
-    can be used for quick debug or algorithm verification.
-  """
-  def grid_to_string(grid) do
-    grid
+    if canvas.flood_symbol do
+      apply_flood(grid_with_rectangles_painted, canvas.flood_symbol)
+    else
+      grid_with_rectangles_painted
+    end
   end
 
   @doc """
@@ -42,15 +40,19 @@ defmodule CanvasApp.Core.Drawer do
       Enum.reduce(start_y..(start_y + rectangle.height - 1), grid, fn y, grid ->
         curr_cell = {x,y}
         fill_symbol =
-          if edge_cell?(curr_cell, rectangle) && rectangle.outline do
-            rectangle.outline
+          if edge_cell?(curr_cell, rectangle) && rectangle.outline_symbol do
+            rectangle.outline_symbol
           else
-            rectangle.fill
+            rectangle.fill_symbol
           end
 
         %{grid | curr_cell => fill_symbol}
       end)
     end)
+
+  end
+
+  defp apply_flood(grid, canvas) do
 
   end
 
