@@ -7,6 +7,7 @@ defmodule CanvasApp.MixProject do
       version: "0.1.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps()
     ]
   end
@@ -17,6 +18,9 @@ defmodule CanvasApp.MixProject do
       mod: {CanvasApp.Application, []}
     ]
   end
+
+  defp elixirc_paths(:test), do: ~w(lib test/support)
+  defp elixirc_paths(_), do: ["lib"]
 
   defp deps do
     [
