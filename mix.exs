@@ -8,7 +8,17 @@ defmodule CanvasApp.MixProject do
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
-      deps: deps()
+      deps: deps(),
+      releases: [
+        canvas_app: [
+          applications: [
+            runtime_tools: :permanent,
+            canvas_app: :permanent
+          ],
+          steps: [:assemble, :tar],
+          include_executales_for: [:unix]
+        ]
+      ]
     ]
   end
 
