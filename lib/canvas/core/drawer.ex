@@ -1,8 +1,8 @@
 defmodule CanvasApp.Core.Drawer do
   alias CanvasApp.Core.Error
-  alias CanvasApp.Model.Canvas
+  alias CanvasApp.Model.{Canvas, Rectangle, Flood}
 
-  @spec draw(Canvas.t()) :: {:ok, map()} | {:error, Core.Error.t()}
+  @spec draw(Canvas.t()) :: {:ok, map()} | {:error, Error.t()}
   def draw(canvas) do
     grid = setup_empty_grid(canvas.rectangles)
 
@@ -11,8 +11,8 @@ defmodule CanvasApp.Core.Drawer do
         draw_rectangle_on_grid(rectangle, grid)
       end)
 
-    if canvas.flood_symbol do
-      apply_flood(grid_with_rectangles_painted, canvas.flood_symbol)
+    if canvas.flood do
+      apply_flood(grid_with_rectangles_painted, canvas.flood)
     else
       grid_with_rectangles_painted
     end
@@ -27,8 +27,8 @@ defmodule CanvasApp.Core.Drawer do
   def setup_empty_grid(rectangles) do
     {width, height} = calculate_required_canvas_size_for_rectangles(rectangles)
 
-    Enum.reduce(0..width, %{}, fn x, grid ->
-      Enum.reduce(0..height, grid, fn y, grid -> Map.put(grid, {x, y}, " ") end)
+    Enum.reduce(0..(width - 1), %{}, fn x, grid ->
+      Enum.reduce(0..(height - 1), grid, fn y, grid -> Map.put(grid, {x, y}, " ") end)
     end)
   end
 
@@ -52,9 +52,41 @@ defmodule CanvasApp.Core.Drawer do
 
   end
 
-  defp apply_flood(grid, canvas) do
 
+  # Rectangle always has borders => rectangle border cell cannot be " ".
+  # We traverse everywhere we can until cell != " ".
+  # If flood start position is already occupied by rectangle— do nothing.
+  @spec apply_flood(Canvas.grid(), Flood.t()) :: Canvas.grid()
+  defp apply_flood(grid, flood) do
+    if filled_cell?(grid, flood.start_coordinate) do
+      grid
+    else
+      fill_sym = flood.fill_symbol
+
+      fill_cell_and_neighbours_to_the_border(grid, flood.start_coordinate, flood.fill_symbol)
+    end
   end
+
+  #neighbour— cell above, on the right, on the left and at the bottom
+  defp fill_cell_and_neighbours_to_the_border(grid, {curr_x, curr_y} = cell, symbol) do
+    grid = Map.put(grid, cell, symbol)
+    top_cell = {curr_x, curr_y + 1}
+    left_cell = {curr_x - 1, curr_y}
+    right_cell = {curr_x + 1, curr_y}
+    bottom_cell = {curr_x, curr_y - 1}
+
+    [top_cell, left_cell, right_cell, bottom_cell]
+    |> Enum.reduce(grid, fn cell, grid ->
+      if grid[cell] && !filled_cell?(grid, cell) do #nil is possible when we look out of borders
+        fill_cell_and_neighbours_to_the_border(grid, cell, symbol)
+      else
+        grid
+      end
+    end)
+  end
+
+  @spec filled_cell?(Canvas.grid(), Canvas.cell()) :: boolean()
+  defp filled_cell?(grid, cell), do: grid[cell] != " "
 
   defp edge_cell?({x,y} = _cell, rectangle) do
     {start_x, start_y} = rectangle.coordinates

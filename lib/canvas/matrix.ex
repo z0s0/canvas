@@ -12,16 +12,16 @@ defmodule CanvasApp.Matrix do
     We represent such matrix as
 
     %{
-       {0,0} => 1,
-       {0, 1} => 2,
-       {0, 2} => 3,
-       {1,0} => 4,
+       {0, 0} => 1,
+       {1, 0} => 2,
+       {2, 0} => 3,
+       {0, 1} => 4,
        {1, 1} => 5,
-       {1, 2} => 6,
-       {2, 0} => 7,
-       {2, 1} => 8,
+       {2, 1} => 6,
+       {0, 2} => 7,
+       {1, 2} => 8,
        {2, 2} => 9
-    }— effecient on reads and updates but hard to read and debug.
+    }— efficient on reads and updates but hard to read and debug.
 
     This module contains helpers for dealing with such formats.
   """

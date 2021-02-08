@@ -2,43 +2,40 @@ defmodule CanvasApp.Core.DrawerTest do
   use ExUnit.Case
 
   alias CanvasApp.{Model, Core.Drawer, Matrix}
-  alias Model.{Rectangle, Canvas, RectangleFactory}
+  alias Model.{Canvas, RectangleFactory}
 
   @fixture1 [
-    "                         ",
-    "                         ",
-    "   @@@@@                 ",
-    "   @XXX@  XXXXXXXXXXXXXX ",
-    "   @@@@@  XOOOOOOOOOOOOX ",
-    "          XOOOOOOOOOOOOX ",
-    "          XOOOOOOOOOOOOX ",
-    "          XOOOOOOOOOOOOX ",
-    "          XXXXXXXXXXXXXX ",
-    "                         "
+    "                        ",
+    "                        ",
+    "   @@@@@                ",
+    "   @XXX@  XXXXXXXXXXXXXX",
+    "   @@@@@  XOOOOOOOOOOOOX",
+    "          XOOOOOOOOOOOOX",
+    "          XOOOOOOOOOOOOX",
+    "          XOOOOOOOOOOOOX",
+    "          XXXXXXXXXXXXXX"
   ]
 
   @fixture2 [
-    "              ....... ",
-    "              ....... ",
-    "              ....... ",
-    "OOOOOOOO      ....... ",
-    "O      O      ....... ",
-    "O    XXXXX    ....... ",
-    "OOOOOXXXXX            ",
-    "     XXXXX            ",
-    "                      "
+    "              .......",
+    "              .......",
+    "              .......",
+    "OOOOOOOO      .......",
+    "O      O      .......",
+    "O    XXXXX    .......",
+    "OOOOOXXXXX           ",
+    "     XXXXX           "
   ]
 
   @fixture3 [
-    "              ....... ",
-    "              ....... ",
-    "              ....... ",
-    "OOOOOOOO      ....... ",
-    "O      O      ....... ",
-    "O    XXXXX    ....... ",
-    "OOOOOXXXXX            ",
-    "     XXXXX            ",
-    "                      "
+    "--------------.......",
+    "--------------.......",
+    "--------------.......",
+    "OOOOOOOO------.......",
+    "O      O------.......",
+    "O    XXXXX----.......",
+    "OOOOOXXXXX-----------",
+    "     XXXXX-----------"
   ]
 
   describe "draw/1 and simple examples" do
@@ -64,13 +61,7 @@ defmodule CanvasApp.Core.DrawerTest do
 
       {:ok, canvas} = Canvas.new(%{rectangles: [rectangle1, rectangle2]})
 
-      human_readable_canvas =
-        canvas
-        |> Drawer.draw()
-        |> Matrix.to_list_of_lists()
-        |> Enum.map(&Enum.join/1)
-
-      assert human_readable_canvas == @fixture1
+      assert draw_canvas_and_convert_to_human_readable(canvas) == @fixture1
     end
 
     test "renders example 2" do
@@ -101,19 +92,11 @@ defmodule CanvasApp.Core.DrawerTest do
 
       {:ok, canvas} = Canvas.new(%{rectangles: [rectangle1, rectangle2, rectangle3]})
 
-      human_readable_canvas =
-        canvas
-        |> Drawer.draw()
-        |> Matrix.to_list_of_lists()
-        |> Enum.map(&Enum.join/1)
-
-      assert human_readable_canvas == @fixture2
+      assert draw_canvas_and_convert_to_human_readable(canvas) == @fixture2
     end
   end
 
   test "properly renders example 3" do
-    # TODO support flood option
-
     rectangle_params1 = %{
       coordinates: {14, 0},
       width: 7,
@@ -139,15 +122,50 @@ defmodule CanvasApp.Core.DrawerTest do
     rectangle1 = RectangleFactory.build(rectangle_params1)
     rectangle2 = RectangleFactory.build(rectangle_params2)
     rectangle3 = RectangleFactory.build(rectangle_params3)
+    flood_params = %{fill_symbol: "-", start_coordinate: {0, 0}}
+    {:ok, canvas} = Canvas.new(%{rectangles: [rectangle1, rectangle2, rectangle3], flood: flood_params})
 
-    {:ok, canvas} = Canvas.new(%{rectangles: [rectangle1, rectangle2, rectangle3]})
-
-    human_readable_canvas =
-      canvas
-      |> Drawer.draw()
-      |> Matrix.to_list_of_lists()
-      |> Enum.map(&Enum.join/1)
-
-    assert human_readable_canvas == @fixture3
+    assert draw_canvas_and_convert_to_human_readable(canvas) == @fixture3
   end
+
+  @fixture [
+    "    ",
+    " 111",
+    " 1@1",
+    " 1@1",
+    " 1@1",
+    " 1@1",
+    " 111"
+  ]
+  #rectangle filled not by fill parameter but with flood
+
+  test "flood fills empty rectangle if start point is inside" do
+    rectangle = RectangleFactory.build(%{width: 3, height: 6, coordinates: {1, 1}, outline_symbol: "1"})
+    flood_params = %{start_coordinate: {2, 2}, fill_symbol: "@"}
+
+    {:ok, canvas} = Canvas.new(%{rectangles: [rectangle], flood: flood_params})
+
+    assert draw_canvas_and_convert_to_human_readable(canvas) == @fixture
+  end
+
+  @fixture [
+    "!!!",
+    "! !",
+    "!!!"
+  ]
+
+  test "nothing should be changed if flood deployed to a cell occupied by rectangle" do
+    rectangle = RectangleFactory.build(%{width: 3, height: 3, coordinates: {0, 0}, outline_symbol: "!"})
+    flood_params = %{start_coordinate: {0, 1}, fill_symbol: "@"}
+
+    {:ok, canvas} = Canvas.new(%{rectangles: [rectangle], flood: flood_params})
+
+    assert draw_canvas_and_convert_to_human_readable(canvas) == @fixture
+  end
+
+  defp draw_canvas_and_convert_to_human_readable(canvas), do:
+    canvas
+    |> Drawer.draw()
+    |> Matrix.to_list_of_lists()
+    |> Enum.map(&Enum.join/1)
 end
