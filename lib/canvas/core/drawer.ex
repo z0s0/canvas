@@ -1,5 +1,4 @@
 defmodule CanvasApp.Core.Drawer do
-  alias CanvasApp.Core.Error
   alias CanvasApp.Model.{Canvas, Rectangle, Flood}
 
   @doc """
@@ -66,8 +65,6 @@ defmodule CanvasApp.Core.Drawer do
     if filled_cell?(grid, flood.start_coordinate) do
       grid
     else
-      fill_sym = flood.fill_symbol
-
       fill_cell_and_neighbours_to_the_border(grid, flood.start_coordinate, flood.fill_symbol)
     end
   end
