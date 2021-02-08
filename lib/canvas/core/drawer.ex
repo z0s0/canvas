@@ -2,7 +2,13 @@ defmodule CanvasApp.Core.Drawer do
   alias CanvasApp.Core.Error
   alias CanvasApp.Model.{Canvas, Rectangle, Flood}
 
-  @spec draw(Canvas.t()) :: {:ok, map()} | {:error, Error.t()}
+  @doc """
+    applies rectangle operations to valid and successfully build canvas
+    Function is pure, no exceptions or error branches considered
+    rectangles rendered by their rules in predefined sequence
+    after rectangles are filled we start flood if flood parameter is present on canvas.
+  """
+  @spec draw(Canvas.t()) :: Canvas.grid()
   def draw(canvas) do
     grid = setup_empty_grid(canvas.rectangles)
 
@@ -20,8 +26,7 @@ defmodule CanvasApp.Core.Drawer do
 
   @doc """
     using rectangles given we can calculate width and height of canvas
-    it will look nicer if we add 3-4 additional cells
-    using width and height we fill the grid with "" values
+    using width and height we fill the grid with " " values
   """
   @spec setup_empty_grid([Rectangle.t()]) :: Canvas.grid()
   def setup_empty_grid(rectangles) do
