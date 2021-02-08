@@ -1,131 +1,27 @@
 defmodule CanvasApp.Core.DrawerTest do
   use ExUnit.Case
 
-  alias CanvasApp.{Model, Core.Drawer, Matrix}
+  alias CanvasApp.{Model, Core.Drawer, Matrix, Fixtures}
   alias Model.{Canvas, RectangleFactory}
-
-  @fixture1 [
-    "                        ",
-    "                        ",
-    "   @@@@@                ",
-    "   @XXX@  XXXXXXXXXXXXXX",
-    "   @@@@@  XOOOOOOOOOOOOX",
-    "          XOOOOOOOOOOOOX",
-    "          XOOOOOOOOOOOOX",
-    "          XOOOOOOOOOOOOX",
-    "          XXXXXXXXXXXXXX"
-  ]
-
-  @fixture2 [
-    "              .......",
-    "              .......",
-    "              .......",
-    "OOOOOOOO      .......",
-    "O      O      .......",
-    "O    XXXXX    .......",
-    "OOOOOXXXXX           ",
-    "     XXXXX           "
-  ]
-
-  @fixture3 [
-    "--------------.......",
-    "--------------.......",
-    "--------------.......",
-    "OOOOOOOO------.......",
-    "O      O------.......",
-    "O    XXXXX----.......",
-    "OOOOOXXXXX-----------",
-    "     XXXXX-----------"
-  ]
 
   describe "draw/1 and simple examples" do
     test "renders example 1" do
-      rectangle_params1 = %{
-        width: 5,
-        height: 3,
-        coordinates: {3,2},
-        outline_symbol: "@",
-        fill_symbol: "X"
-      }
-      rectangle1 = RectangleFactory.build(rectangle_params1)
+      canvas = Fixtures.canvas_for_fixture1()
 
-      rectangle_params2 = %{
-        width: 14,
-        height: 6,
-        coordinates: {10, 3},
-        outline_symbol: "X",
-        fill_symbol: "O"
-      }
-
-      rectangle2 = RectangleFactory.build(rectangle_params2)
-
-      {:ok, canvas} = Canvas.new(%{rectangles: [rectangle1, rectangle2]})
-
-      assert draw_canvas_and_convert_to_human_readable(canvas) == @fixture1
+      assert draw_canvas_and_convert_to_human_readable(canvas) == Fixtures.fixture1()
     end
 
     test "renders example 2" do
-      rectangle_params1 = %{
-        coordinates: {14, 0},
-        width: 7,
-        height: 6,
-        outline_symbol: nil,
-        fill_symbol: "."
-      }
-      rectangle_params2 = %{
-        coordinates: {0, 3},
-        width: 8,
-        height: 4,
-        outline_symbol: "O",
-        fill_symbol: nil
-      }
-      rectangle_params3 = %{
-        coordinates: {5, 5},
-        width: 5,
-        height: 3,
-        outline_symbol: "X",
-        fill_symbol: "X"
-      }
-      rectangle1 = RectangleFactory.build(rectangle_params1)
-      rectangle2 = RectangleFactory.build(rectangle_params2)
-      rectangle3 = RectangleFactory.build(rectangle_params3)
+      canvas = Fixtures.canvas_for_fixture2()
 
-      {:ok, canvas} = Canvas.new(%{rectangles: [rectangle1, rectangle2, rectangle3]})
-
-      assert draw_canvas_and_convert_to_human_readable(canvas) == @fixture2
+      assert draw_canvas_and_convert_to_human_readable(canvas) == Fixtures.fixture2()
     end
   end
 
   test "properly renders example 3" do
-    rectangle_params1 = %{
-      coordinates: {14, 0},
-      width: 7,
-      height: 6,
-      outline_symbol: nil,
-      fill_symbol: "."
-    }
-    rectangle_params2 = %{
-      coordinates: {0, 3},
-      width: 8,
-      height: 4,
-      outline_symbol: "O",
-      fill_symbol: nil
-    }
-    rectangle_params3 = %{
-      coordinates: {5, 5},
-      width: 5,
-      height: 3,
-      outline_symbol: "X",
-      fill_symbol: "X"
-    }
+    canvas = Fixtures.canvas_for_fixture3()
 
-    rectangle1 = RectangleFactory.build(rectangle_params1)
-    rectangle2 = RectangleFactory.build(rectangle_params2)
-    rectangle3 = RectangleFactory.build(rectangle_params3)
-    flood_params = %{fill_symbol: "-", start_coordinate: {0, 0}}
-    {:ok, canvas} = Canvas.new(%{rectangles: [rectangle1, rectangle2, rectangle3], flood: flood_params})
-
-    assert draw_canvas_and_convert_to_human_readable(canvas) == @fixture3
+    assert draw_canvas_and_convert_to_human_readable(canvas) == Fixtures.fixture3()
   end
 
   @fixture [

@@ -3,9 +3,15 @@ defmodule CanvasApp.Application do
 
   def start(_type, _args) do
     children = [
+      CanvasApp.Repo
     ]
 
     opts = [strategy: :one_for_one, name: CanvasApp.Supervisor]
-    Supervisor.start_link(children, opts)
+    ok_pid = Supervisor.start_link(children, opts)
+
+    CanvasApp.Migrator.migrate()
+    #CanvasApp.PrepopulateSeeds.perform()
+
+    ok_pid
   end
 end

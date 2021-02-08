@@ -30,4 +30,12 @@ defmodule CanvasApp.Model.Rectangle do
     end
   end
   def new(_), do: {:error, Error.ValidationError.from_string("invalid shape of params")}
+
+  @spec valid?(map()) :: boolean()
+  def valid?(params) do
+    case new(params) do
+      {:ok, _} -> true
+      {:error, _} -> false
+    end
+  end
 end

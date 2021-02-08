@@ -25,7 +25,7 @@ defmodule CanvasApp.Model.Canvas do
           {:ok, flood} ->
             {:ok, %__MODULE__{id: UUID.generate(), rectangles: rectangles, flood: flood}}
 
-            {:error, %{reason: reason}} = err -> err
+            {:error, %{reason: _}} = err -> err
         end
       else
         {:ok, %__MODULE__{id: UUID.generate(), rectangles: rectangles}}
