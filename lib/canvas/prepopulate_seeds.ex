@@ -4,7 +4,6 @@ defmodule CanvasApp.PrepopulateSeeds do
     Prepopulated canvases are taken from app description
   """
 
-  alias CanvasApp.Model.{Canvas}
   alias CanvasApp.Core.CanvasContext
 
   def perform() do
