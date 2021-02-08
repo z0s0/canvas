@@ -59,7 +59,7 @@ The canvas can be assumed to be a fixed size.
 - Rectangle at [10, 3] with width: 14, height: 6, outline character: `X`, fill character: `O`
 
 ```
-
+          
 
    @@@@@
    @XXX@  XXXXXXXXXXXXXX
