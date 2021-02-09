@@ -9,7 +9,7 @@ config :canvas_app, CanvasApp.Repo,
   hostname: "db"
 
 config :canvas_app, CanvasApp.API.Endpoint, [port: 5000]
-
+config :canvas_app, populate_seeds?: true
 if File.exists?("config/#{Mix.env()}.exs") do
   import_config "#{Mix.env()}.exs"
 end

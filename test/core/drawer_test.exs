@@ -45,12 +45,13 @@ defmodule CanvasApp.Core.DrawerTest do
   end
 
   @fixture [
-    "!!!",
-    "! !",
-    "!!!"
+    "@@@",
+    "@ @",
+    "@@@"
   ]
 
-  test "nothing should be changed if flood deployed to a cell occupied by rectangle" do
+  test "all rectangle edge symbols to be replaced if flood start_point targets to rectangle's point" do
+    #all ! replaced by @
     rectangle = RectangleFactory.build(%{width: 3, height: 3, coordinates: {0, 0}, outline_symbol: "!"})
     flood_params = %{start_coordinate: {0, 1}, fill_symbol: "@"}
 

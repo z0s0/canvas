@@ -56,22 +56,19 @@ defmodule CanvasApp.Core.Drawer do
 
   end
 
-
   # Rectangle always has borders => rectangle border cell cannot be " ".
   # We traverse everywhere we can until cell != " ".
   # If flood start position is already occupied by rectangle— do nothing.
   @spec apply_flood(Canvas.grid(), Flood.t()) :: Canvas.grid()
   defp apply_flood(grid, flood) do
-    if filled_cell?(grid, flood.start_coordinate) do
-      grid
-    else
-      fill_cell_and_neighbours_to_the_border(grid, flood.start_coordinate, flood.fill_symbol)
-    end
+    symbol_at_start_position = grid[flood.start_coordinate]
+
+    fill_cell_and_neighbours_to_the_border(grid, flood.start_coordinate, flood.fill_symbol, symbol_at_start_position)
   end
 
   #neighbour— cell above, on the right, on the left and at the bottom
-  defp fill_cell_and_neighbours_to_the_border(grid, {curr_x, curr_y} = cell, symbol) do
-    grid = Map.put(grid, cell, symbol)
+  defp fill_cell_and_neighbours_to_the_border(grid, {curr_x, curr_y} = cell, fill_symbol, symbol_to_be_replaced) do
+    grid = Map.put(grid, cell, fill_symbol)
     top_cell = {curr_x, curr_y + 1}
     left_cell = {curr_x - 1, curr_y}
     right_cell = {curr_x + 1, curr_y}
@@ -79,8 +76,8 @@ defmodule CanvasApp.Core.Drawer do
 
     [top_cell, left_cell, right_cell, bottom_cell]
     |> Enum.reduce(grid, fn cell, grid ->
-      if grid[cell] && !filled_cell?(grid, cell) do #nil is possible when we look out of borders
-        fill_cell_and_neighbours_to_the_border(grid, cell, symbol)
+      if grid[cell] && grid[cell] == symbol_to_be_replaced do #nil is possible when we look out of borders
+        fill_cell_and_neighbours_to_the_border(grid, cell, fill_symbol, symbol_to_be_replaced)
       else
         grid
       end
