@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import {Row, Col, Card, Divider} from 'antd'
 
 import { getListDrawings } from '../../lib/api'
 import { Drawing } from '../../lib/types'
@@ -15,10 +16,20 @@ export default () => {
     }, [])
 
     return(
-        <>
-          {errors.map(err => <span key={err}>{err}</span>)}
-
-          {drawings.map(drawing => <DrawingCard drawing={drawing} key={drawing.id}/>)}
-        </>
+        <Card>
+            <Row>
+                <Col span={16} offset={4}>
+                {errors.map(err => <span key={err}>{err}</span>)}
+                {
+                  drawings.map(drawing => 
+                    <>   
+                      <DrawingCard drawing={drawing} key={drawing.id}/>
+                      <Divider/>
+                   </> 
+                )}
+                </Col>
+            </Row>
+          
+        </Card>
     )
 }
