@@ -30,7 +30,8 @@ defmodule CanvasApp.MixProject do
       {:elixir_uuid, "~> 1.2"},
       {:ecto_sql, "~> 3.5"},
       {:postgrex, ">= 0.0.0"},
-      {:plug_cowboy, "~> 2.3"}
+      {:plug_cowboy, "~> 2.3"},
+      {:mock, "~> 0.3.0", only: :test}
     ]
   end
 end

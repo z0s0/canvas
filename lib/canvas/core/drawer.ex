@@ -2,7 +2,7 @@ defmodule CanvasApp.Core.Drawer do
   alias CanvasApp.Model.{Canvas, Rectangle, Flood}
 
   @doc """
-    applies rectangle operations to valid and successfully build canvas
+    applies rectangle operations to valid and successfully built canvas
     Function is pure, no exceptions or error branches considered
     rectangles rendered by their rules in predefined sequence
     after rectangles are filled we start flood if flood parameter is present on canvas.
@@ -83,9 +83,6 @@ defmodule CanvasApp.Core.Drawer do
       end
     end)
   end
-
-  @spec filled_cell?(Canvas.grid(), Canvas.cell()) :: boolean()
-  defp filled_cell?(grid, cell), do: grid[cell] != " "
 
   defp edge_cell?({x,y} = _cell, rectangle) do
     {start_x, start_y} = rectangle.coordinates
