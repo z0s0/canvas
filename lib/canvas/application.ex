@@ -12,7 +12,10 @@ defmodule CanvasApp.Application do
     ok_pid = Supervisor.start_link(children, opts)
 
     CanvasApp.Migrator.migrate()
-    CanvasApp.PrepopulateSeeds.perform()
+
+    if Application.get_env(:canvas_app, :populate_seeds?) do
+      CanvasApp.PrepopulateSeeds.perform()
+    end
 
     ok_pid
   end
