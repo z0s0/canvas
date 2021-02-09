@@ -1,11 +1,5 @@
 import React from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      init 
-    </div>
-  );
-}
+import Drawings from './features/drawings'
 
-export default App;
+export default () => <Drawings/>

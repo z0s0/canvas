@@ -1,12 +1,14 @@
 
 type Coordinate = [number, number]
+type UUID = string
+export type Matrix<T> = Array<Array<T>>
 
-interface Flood {
+export interface Flood {
   startCoordinate: Coordinate,
   fillSymbol: string
 }
 
-interface Rectangle {
+export interface Rectangle {
   width: number,
   height: number,
   coordinates: Coordinate,
@@ -15,7 +17,8 @@ interface Rectangle {
 }
 
 export interface Drawing {
-    matrix: Array<Array<string>>,
-    flood: Flood,
+    id: UUID,
+    matrix: Matrix<string>
+    flood: Flood | null,
     rectangles: Rectangle[]
 }

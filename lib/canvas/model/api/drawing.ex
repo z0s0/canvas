@@ -19,6 +19,7 @@ defmodule CanvasApp.Model.API.Drawing do
 
   @derive Jason.Encoder
   typedstruct enforce: true do
+    field :id, CanvasApp.UUID.t()
     field :matrix, [[String.t()]]
     field :flood, flood() | nil
     field :rectangles, [rectangle_definition()]
@@ -29,7 +30,7 @@ defmodule CanvasApp.Model.API.Drawing do
     rectangles = Enum.map(canvas.rectangles, &transform_rectangle/1)
     flood = transform_flood(canvas.flood)
 
-    %{rectangles: rectangles, flood: flood, matrix: matrix}
+    %{rectangles: rectangles, flood: flood, matrix: matrix, id: canvas.id}
   end
 
   defp transform_rectangle(%{
@@ -38,7 +39,7 @@ defmodule CanvasApp.Model.API.Drawing do
     coordinates: {x, y},
     outline_symbol: outline_symbol,
     fill_symbol: fill_symbol
-  } = rectangle_object) do
+  }) do
      # convert symbols back to definition
      outline_symbol_was = if outline_symbol == fill_symbol do
        nil
