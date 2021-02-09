@@ -9,7 +9,11 @@ defmodule CanvasApp.API.ApiContext do
   alias CanvasApp.Model.API.Drawing
 
   def list_drawings() do
-    [drawer, crud, matrix] = [Layer.drawer_module(), Layer.canvas_crud_module(), Layer.matrix_module()]
+    [drawer, crud, matrix] = [
+      Layer.drawer_module(),
+      Layer.canvas_crud_module(),
+      Layer.matrix_module()
+    ]
 
     crud.list()
     |> Enum.map(fn canvas ->

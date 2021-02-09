@@ -17,7 +17,7 @@ defmodule CanvasApp.GenError do
       use TypedStruct
 
       typedstruct do
-        field :reason, String.t()
+        field(:reason, String.t())
       end
 
       def from_string(reason) when is_binary(reason), do: %__MODULE__{reason: reason}

@@ -1,9 +1,9 @@
 defmodule CanvasApp.API.Endpoint do
   use Plug.Router
 
-  plug :put_default_headers
-  plug :match
-  plug :dispatch
+  plug(:put_default_headers)
+  plug(:match)
+  plug(:dispatch)
 
   alias CanvasApp.API.ApiContext, as: Service
 

@@ -10,7 +10,7 @@ defmodule CanvasApp.Model.RectangleTest do
     end
 
     test "returns {:error, Error.ValidationError.t()} when no outline and fill provided" do
-      params = %{width: 5, height: 3, coordinates: {0,0}}
+      params = %{width: 5, height: 3, coordinates: {0, 0}}
       assert {:error, %ValidationError{}} = Rectangle.new(params)
     end
 

@@ -31,7 +31,8 @@ defmodule CanvasApp.MixProject do
       {:ecto_sql, "~> 3.5"},
       {:postgrex, ">= 0.0.0"},
       {:plug_cowboy, "~> 2.3"},
-      {:mock, "~> 0.3.0", only: :test}
+      {:mock, "~> 0.3.0", only: :test},
+      {:git_hooks, "~> 0.5.0", only: [:test, :dev], runtime: false}
     ]
   end
 end

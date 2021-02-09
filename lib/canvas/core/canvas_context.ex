@@ -34,13 +34,13 @@ defmodule CanvasApp.Core.CanvasContext do
     |> CanvasSchema.changeset(Map.put(canvas_params, :id, UUID.generate()))
     |> Repo.insert()
     |> case do
-         {:ok, schema} ->
-           {:ok, canvas_schema_to_canvas(schema)}
+      {:ok, schema} ->
+        {:ok, canvas_schema_to_canvas(schema)}
 
-         {:error, changeset} ->
-           err = changeset_errors_to_string(changeset.errors)
-           {:error, Error.ValidationError.from_string(err)}
-       end
+      {:error, changeset} ->
+        err = changeset_errors_to_string(changeset.errors)
+        {:error, Error.ValidationError.from_string(err)}
+    end
   end
 
   @spec canvas_schema_to_canvas(%{required(:rectangles) => [map()]}) :: Canvas.t()
@@ -55,45 +55,53 @@ defmodule CanvasApp.Core.CanvasContext do
   # seems like all rectangles stored in database are valid(validations on create prevent wrong shapes)
   # so that we can skip error branch of Rectangle.new/1
   @spec rectangle_from_dump(map()) :: Rectangle.t()
-  defp rectangle_from_dump(%{
-    "coordinates" => [x, y],
-    "height" => height,
-    "width" => width
-  } = dump) do
-    {:ok, rectangle} = Rectangle.new(%{
-      width: width,
-      height: height,
-      coordinates: {x, y},
-      outline_symbol: dump["outline_symbol"],
-      fill_symbol: dump["fill_symbol"]
-    })
+  defp rectangle_from_dump(
+         %{
+           "coordinates" => [x, y],
+           "height" => height,
+           "width" => width
+         } = dump
+       ) do
+    {:ok, rectangle} =
+      Rectangle.new(%{
+        width: width,
+        height: height,
+        coordinates: {x, y},
+        outline_symbol: dump["outline_symbol"],
+        fill_symbol: dump["fill_symbol"]
+      })
 
     rectangle
   end
 
-  defp rectangle_from_dump(%{
-    width: width,
-    height: height,
-    coordinates: [x, y]
-  } = dump) do
-    {:ok, rectangle} = Rectangle.new(%{
-      width: width,
-      height: height,
-      coordinates: {x, y},
-      outline_symbol: dump[:outline_symbol],
-      fill_symbol: dump[:fill_symbol]
-    })
+  defp rectangle_from_dump(
+         %{
+           width: width,
+           height: height,
+           coordinates: [x, y]
+         } = dump
+       ) do
+    {:ok, rectangle} =
+      Rectangle.new(%{
+        width: width,
+        height: height,
+        coordinates: {x, y},
+        outline_symbol: dump[:outline_symbol],
+        fill_symbol: dump[:fill_symbol]
+      })
 
     rectangle
   end
 
   @spec flood_from_dump(map() | nil) :: Flood.t() | nil
   defp flood_from_dump(nil), do: nil
+
   defp flood_from_dump(%{fill_symbol: fill_sym, start_coordinate: [x, y]}) do
     {:ok, flood} = Flood.new(%{fill_symbol: fill_sym, start_coordinate: {x, y}})
 
     flood
   end
+
   defp flood_from_dump(%{"fill_symbol" => fill_sym, "start_coordinate" => [x, y]}) do
     {:ok, flood} = Flood.new(%{fill_symbol: fill_sym, start_coordinate: {x, y}})
 

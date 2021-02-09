@@ -7,7 +7,7 @@ defmodule CanvasApp.Core.CanvasContextTest do
   alias CanvasApp.Core.Error.{NotFound, ValidationError}
   alias CanvasApp.Model.{Canvas, Rectangle, Flood}
 
-  @valid_rectangle_params %{width: 1, height: 1, coordinates: [1,2], outline_symbol: "@"}
+  @valid_rectangle_params %{width: 1, height: 1, coordinates: [1, 2], outline_symbol: "@"}
 
   describe "list/0" do
     test "returns empty list when no canvases persisted" do
@@ -18,7 +18,7 @@ defmodule CanvasApp.Core.CanvasContextTest do
       CanvasApp.PrepopulateSeeds.perform()
       result = Service.list()
 
-      assert Enum.all?(result, & match?(%Canvas{}, &1))
+      assert Enum.all?(result, &match?(%Canvas{}, &1))
     end
   end
 
@@ -40,6 +40,7 @@ defmodule CanvasApp.Core.CanvasContextTest do
   describe "create/1" do
     test "{:ok, Canvas.t()} when params valid and insertion succeeded" do
       flood_params = %{start_coordinate: [1, 2], fill_symbol: "1"}
+
       params = %{
         flood: flood_params,
         rectangles: [@valid_rectangle_params]
@@ -47,7 +48,11 @@ defmodule CanvasApp.Core.CanvasContextTest do
 
       {:ok, %Canvas{} = canvas} = Service.create(params)
 
-      assert canvas.rectangles == [Rectangle.new(%{width: 1, height: 1, coordinates: {1, 2}, outline_symbol: "@"}) |> elem(1)]
+      assert canvas.rectangles == [
+               Rectangle.new(%{width: 1, height: 1, coordinates: {1, 2}, outline_symbol: "@"})
+               |> elem(1)
+             ]
+
       assert canvas.flood == Flood.new(%{fill_symbol: "1", start_coordinate: {1, 2}}) |> elem(1)
     end
 
@@ -58,8 +63,9 @@ defmodule CanvasApp.Core.CanvasContextTest do
 
       {:error, %ValidationError{reason: reason}} = Service.create(params)
 
-      #bad to make such comparisons but for the sake of simplicity it is ok
-      assert reason == "start_coordinate: x and y must not be negative, fill_symbol: must not be empty string"
+      # bad to make such comparisons but for the sake of simplicity it is ok
+      assert reason ==
+               "start_coordinate: x and y must not be negative, fill_symbol: must not be empty string"
     end
 
     test "{:error, ValidationError.t()} when invalid params(rectangle format is wrong)" do

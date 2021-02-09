@@ -30,7 +30,6 @@ defmodule CanvasApp.Fixtures do
     ]
   end
 
-
   def fixture3() do
     [
       "--------------.......",
@@ -50,7 +49,7 @@ defmodule CanvasApp.Fixtures do
     rectangle_params1 = %{
       width: 5,
       height: 3,
-      coordinates: [3,2],
+      coordinates: [3, 2],
       outline_symbol: "@",
       fill_symbol: "X"
     }
@@ -74,6 +73,7 @@ defmodule CanvasApp.Fixtures do
       outline_symbol: nil,
       fill_symbol: "."
     }
+
     rectangle_params2 = %{
       coordinates: [0, 3],
       width: 8,
@@ -81,6 +81,7 @@ defmodule CanvasApp.Fixtures do
       outline_symbol: "O",
       fill_symbol: nil
     }
+
     rectangle_params3 = %{
       coordinates: [5, 5],
       width: 5,
@@ -100,6 +101,7 @@ defmodule CanvasApp.Fixtures do
       outline_symbol: nil,
       fill_symbol: "."
     }
+
     rectangle_params2 = %{
       coordinates: [0, 3],
       width: 8,
@@ -107,6 +109,7 @@ defmodule CanvasApp.Fixtures do
       outline_symbol: "O",
       fill_symbol: nil
     }
+
     rectangle_params3 = %{
       coordinates: [5, 5],
       width: 5,
@@ -127,10 +130,11 @@ defmodule CanvasApp.Fixtures do
     rectangle_params1 = %{
       width: 5,
       height: 3,
-      coordinates: {3,2},
+      coordinates: {3, 2},
       outline_symbol: "@",
       fill_symbol: "X"
     }
+
     rectangle1 = RectangleFactory.build(rectangle_params1)
 
     rectangle_params2 = %{
@@ -156,6 +160,7 @@ defmodule CanvasApp.Fixtures do
       outline_symbol: nil,
       fill_symbol: "."
     }
+
     rectangle_params2 = %{
       coordinates: {0, 3},
       width: 8,
@@ -163,6 +168,7 @@ defmodule CanvasApp.Fixtures do
       outline_symbol: "O",
       fill_symbol: nil
     }
+
     rectangle_params3 = %{
       coordinates: {5, 5},
       width: 5,
@@ -170,6 +176,7 @@ defmodule CanvasApp.Fixtures do
       outline_symbol: "X",
       fill_symbol: "X"
     }
+
     rectangle1 = RectangleFactory.build(rectangle_params1)
     rectangle2 = RectangleFactory.build(rectangle_params2)
     rectangle3 = RectangleFactory.build(rectangle_params3)
@@ -187,6 +194,7 @@ defmodule CanvasApp.Fixtures do
       outline_symbol: nil,
       fill_symbol: "."
     }
+
     rectangle_params2 = %{
       coordinates: {0, 3},
       width: 8,
@@ -194,6 +202,7 @@ defmodule CanvasApp.Fixtures do
       outline_symbol: "O",
       fill_symbol: nil
     }
+
     rectangle_params3 = %{
       coordinates: {5, 5},
       width: 5,
@@ -206,7 +215,9 @@ defmodule CanvasApp.Fixtures do
     rectangle2 = RectangleFactory.build(rectangle_params2)
     rectangle3 = RectangleFactory.build(rectangle_params3)
     flood_params = %{fill_symbol: "-", start_coordinate: {0, 0}}
-    {:ok, canvas} = Canvas.new(%{rectangles: [rectangle1, rectangle2, rectangle3], flood: flood_params})
+
+    {:ok, canvas} =
+      Canvas.new(%{rectangles: [rectangle1, rectangle2, rectangle3], flood: flood_params})
 
     canvas
   end
