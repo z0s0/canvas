@@ -17,7 +17,8 @@ defmodule CanvasApp.PrepopulateSeeds do
     rectangle_params1 = %{
       width: 5,
       height: 3,
-      coordinates: [3,2], #list because we simulate params received from frontend
+      # list because we simulate params received from frontend
+      coordinates: [3, 2],
       outline_symbol: "@",
       fill_symbol: "X"
     }
@@ -41,6 +42,7 @@ defmodule CanvasApp.PrepopulateSeeds do
       outline_symbol: nil,
       fill_symbol: "."
     }
+
     rectangle_params2 = %{
       coordinates: [0, 3],
       width: 8,
@@ -48,6 +50,7 @@ defmodule CanvasApp.PrepopulateSeeds do
       outline_symbol: "O",
       fill_symbol: nil
     }
+
     rectangle_params3 = %{
       coordinates: [5, 5],
       width: 5,
@@ -67,6 +70,7 @@ defmodule CanvasApp.PrepopulateSeeds do
       outline_symbol: nil,
       fill_symbol: "."
     }
+
     rectangle_params2 = %{
       coordinates: [0, 3],
       width: 8,
@@ -74,6 +78,7 @@ defmodule CanvasApp.PrepopulateSeeds do
       outline_symbol: "O",
       fill_symbol: nil
     }
+
     rectangle_params3 = %{
       coordinates: [5, 5],
       width: 5,

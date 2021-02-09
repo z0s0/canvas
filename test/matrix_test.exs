@@ -18,10 +18,11 @@ defmodule CanvasApp.MatrixTest do
       }
 
       result = Matrix.to_list_of_lists(matrix)
+
       assert result == [
-               [1,2,3],
-               [4,5,6],
-               [7,8,9]
+               [1, 2, 3],
+               [4, 5, 6],
+               [7, 8, 9]
              ]
     end
   end

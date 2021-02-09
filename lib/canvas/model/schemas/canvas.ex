@@ -10,8 +10,8 @@ defmodule CanvasApp.Model.Schemas.Canvas do
   @primary_key {:id, :binary_id, autogenerate: false}
 
   schema "canvases" do
-    field :rectangles, {:array, :map}
-    field :flood, :map
+    field(:rectangles, {:array, :map})
+    field(:flood, :map)
 
     timestamps()
   end
@@ -34,29 +34,28 @@ defmodule CanvasApp.Model.Schemas.Canvas do
       |> get_field(:rectangles)
       |> Enum.map(&Rectangle.new/1)
 
-    if Enum.all?(rectangles, & match?({:ok, _}, &1)) do
+    if Enum.all?(rectangles, &match?({:ok, _}, &1)) do
       changeset
     else
-       first_error = Enum.find(rectangles, & match?({:error, _}, &1)) |> elem(1)
-       add_error(changeset, :rectangles, first_error.reason)
+      first_error = Enum.find(rectangles, &match?({:error, _}, &1)) |> elem(1)
+      add_error(changeset, :rectangles, first_error.reason)
     end
-
-
-
   end
 
   defp validate_flood(changeset) do
     flood = get_field(changeset, :flood)
+
     if is_nil(flood) do
       changeset
     else
       fill_symbol = flood.fill_symbol
 
-      changeset = if fill_symbol == "" do
-        add_error(changeset, :fill_symbol, "must not be empty string")
-      else
-        changeset
-      end
+      changeset =
+        if fill_symbol == "" do
+          add_error(changeset, :fill_symbol, "must not be empty string")
+        else
+          changeset
+        end
 
       if valid_coordinates?(flood.start_coordinate) do
         changeset

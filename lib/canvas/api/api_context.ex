@@ -5,14 +5,19 @@ defmodule CanvasApp.API.ApiContext do
     External structures must be convenient for frontend application
   """
 
-  alias CanvasApp.Core.{Drawer, CanvasContext}
-  alias CanvasApp.Matrix
+  alias CanvasApp.API.Layer
   alias CanvasApp.Model.API.Drawing
 
   def list_drawings() do
-    CanvasContext.list()
+    [drawer, crud, matrix] = [
+      Layer.drawer_module(),
+      Layer.canvas_crud_module(),
+      Layer.matrix_module()
+    ]
+
+    crud.list()
     |> Enum.map(fn canvas ->
-      matrix = canvas |> Drawer.draw() |> Matrix.to_list_of_lists()
+      matrix = canvas |> drawer.draw() |> matrix.to_list_of_lists()
       Drawing.from_canvas(canvas, matrix)
     end)
   end

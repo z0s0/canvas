@@ -8,16 +8,17 @@ defmodule CanvasApp.Model.Canvas do
   alias CanvasApp.Model.{Rectangle, Error.ValidationError, Flood}
 
   typedstruct enforce: true do
-    field :id, UUID.t()
-    field :rectangles, [Rectangle.t()]
-    field :flood, Flood.t(), enforce: false
+    field(:id, UUID.t())
+    field(:rectangles, [Rectangle.t()])
+    field(:flood, Flood.t(), enforce: false)
   end
 
-  @spec new(%{required(:rectangles) => [map()]}) :: {:ok, __MODULE__.t()} | {:error, ValidationError.t()}
+  @spec new(%{required(:rectangles) => [map()]}) ::
+          {:ok, __MODULE__.t()} | {:error, ValidationError.t()}
   def new(%{rectangles: [_ | _] = rectangles} = params) do
     constructed_rectangles = Enum.map(rectangles, &Rectangle.new/1)
 
-    if Enum.all?(constructed_rectangles, & match?({:ok, _}, &1)) do
+    if Enum.all?(constructed_rectangles, &match?({:ok, _}, &1)) do
       flood_params = Map.get(params, :flood)
 
       if flood_params do
@@ -25,7 +26,8 @@ defmodule CanvasApp.Model.Canvas do
           {:ok, flood} ->
             {:ok, %__MODULE__{id: UUID.generate(), rectangles: rectangles, flood: flood}}
 
-            {:error, %{reason: _}} = err -> err
+          {:error, %{reason: _}} = err ->
+            err
         end
       else
         {:ok, %__MODULE__{id: UUID.generate(), rectangles: rectangles}}
@@ -34,12 +36,13 @@ defmodule CanvasApp.Model.Canvas do
       # do not lose errors
       errors =
         constructed_rectangles
-        |> Enum.filter(& match?({:error, _}, &1))
-        |> Enum.map(& elem(&1, 1).reason)
+        |> Enum.filter(&match?({:error, _}, &1))
+        |> Enum.map(&elem(&1, 1).reason)
         |> Enum.join(", ")
 
       {:error, ValidationError.from_string(errors)}
     end
   end
+
   def new(_), do: {:error, ValidationError.from_string("invalid shape of params")}
 end

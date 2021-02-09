@@ -8,7 +8,10 @@ defmodule CanvasApp.MixProject do
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
-      deps: deps()
+      deps: deps(),
+      elixirc_options: [
+        warnings_as_errors: true
+      ]
     ]
   end
 
@@ -30,7 +33,9 @@ defmodule CanvasApp.MixProject do
       {:elixir_uuid, "~> 1.2"},
       {:ecto_sql, "~> 3.5"},
       {:postgrex, ">= 0.0.0"},
-      {:plug_cowboy, "~> 2.3"}
+      {:plug_cowboy, "~> 2.3"},
+      {:mock, "~> 0.3.0", only: :test},
+      {:git_hooks, "~> 0.5.0", only: [:test, :dev], runtime: false}
     ]
   end
 end

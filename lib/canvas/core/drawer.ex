@@ -2,7 +2,7 @@ defmodule CanvasApp.Core.Drawer do
   alias CanvasApp.Model.{Canvas, Rectangle, Flood}
 
   @doc """
-    applies rectangle operations to valid and successfully build canvas
+    applies rectangle operations to valid and successfully built canvas
     Function is pure, no exceptions or error branches considered
     rectangles rendered by their rules in predefined sequence
     after rectangles are filled we start flood if flood parameter is present on canvas.
@@ -42,7 +42,8 @@ defmodule CanvasApp.Core.Drawer do
 
     Enum.reduce(start_x..(start_x + rectangle.width - 1), initial_grid, fn x, grid ->
       Enum.reduce(start_y..(start_y + rectangle.height - 1), grid, fn y, grid ->
-        curr_cell = {x,y}
+        curr_cell = {x, y}
+
         fill_symbol =
           if edge_cell?(curr_cell, rectangle) && rectangle.outline_symbol do
             rectangle.outline_symbol
@@ -53,7 +54,6 @@ defmodule CanvasApp.Core.Drawer do
         %{grid | curr_cell => fill_symbol}
       end)
     end)
-
   end
 
   # Rectangle always has borders => rectangle border cell cannot be " ".
@@ -63,11 +63,21 @@ defmodule CanvasApp.Core.Drawer do
   defp apply_flood(grid, flood) do
     symbol_at_start_position = grid[flood.start_coordinate]
 
-    fill_cell_and_neighbours_to_the_border(grid, flood.start_coordinate, flood.fill_symbol, symbol_at_start_position)
+    fill_cell_and_neighbours_to_the_border(
+      grid,
+      flood.start_coordinate,
+      flood.fill_symbol,
+      symbol_at_start_position
+    )
   end
 
-  #neighbour— cell above, on the right, on the left and at the bottom
-  defp fill_cell_and_neighbours_to_the_border(grid, {curr_x, curr_y} = cell, fill_symbol, symbol_to_be_replaced) do
+  # neighbour— cell above, on the right, on the left and at the bottom
+  defp fill_cell_and_neighbours_to_the_border(
+         grid,
+         {curr_x, curr_y} = cell,
+         fill_symbol,
+         symbol_to_be_replaced
+       ) do
     grid = Map.put(grid, cell, fill_symbol)
     top_cell = {curr_x, curr_y + 1}
     left_cell = {curr_x - 1, curr_y}
@@ -76,7 +86,8 @@ defmodule CanvasApp.Core.Drawer do
 
     [top_cell, left_cell, right_cell, bottom_cell]
     |> Enum.reduce(grid, fn cell, grid ->
-      if grid[cell] && grid[cell] == symbol_to_be_replaced do #nil is possible when we look out of borders
+      # nil is possible when we look out of borders
+      if grid[cell] && grid[cell] == symbol_to_be_replaced do
         fill_cell_and_neighbours_to_the_border(grid, cell, fill_symbol, symbol_to_be_replaced)
       else
         grid
@@ -84,16 +95,13 @@ defmodule CanvasApp.Core.Drawer do
     end)
   end
 
-  @spec filled_cell?(Canvas.grid(), Canvas.cell()) :: boolean()
-  defp filled_cell?(grid, cell), do: grid[cell] != " "
-
-  defp edge_cell?({x,y} = _cell, rectangle) do
+  defp edge_cell?({x, y} = _cell, rectangle) do
     {start_x, start_y} = rectangle.coordinates
 
     x == start_x ||
-      x == (start_x + rectangle.width - 1) ||
-    y == start_y ||
-      y == (start_y + rectangle.height - 1)
+      x == start_x + rectangle.width - 1 ||
+      y == start_y ||
+      y == start_y + rectangle.height - 1
   end
 
   defp calculate_required_canvas_size_for_rectangles(rectangles) do
@@ -102,7 +110,8 @@ defmodule CanvasApp.Core.Drawer do
       width_required_for_rectangle = rectangle.width + elem(coordinates, 0)
       height_required_for_rectangle = rectangle.height + elem(coordinates, 1)
 
-      {max(width_required, width_required_for_rectangle), max(height_required, height_required_for_rectangle)}
+      {max(width_required, width_required_for_rectangle),
+       max(height_required, height_required_for_rectangle)}
     end)
   end
 end
