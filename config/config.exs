@@ -6,6 +6,7 @@ config :canvas_app, CanvasApp.Repo,
   database: "canvas_app_dev",
   username: "postgres",
   password: "postgres",
+  # replace to "localhost" if you want to run app locally without docker
   hostname: "db"
 
 config :canvas_app, CanvasApp.API.Endpoint, port: 5000

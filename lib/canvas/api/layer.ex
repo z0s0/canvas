@@ -1,5 +1,5 @@
 defmodule CanvasApp.API.Layer do
-  @module """
+  @moduledoc """
     Layer— the only point service can take dependencies from.
     It simplifies dependency injection and prevents developers to make awkward imports
   """
