@@ -1,0 +1,36 @@
+version: '3.6'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'
+    environment:
+      MIX_ENV: dev
+    depends_on:
+      - db
+
+  client:
+    build:
+      context: ./client/canvas
+      dockerfile: ./Dockerfile
+    ports:
+      - '80:80'
+
+  db:
+    image: 'postgres:12'
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - 'pgdata:/var/lib/postgresql/data'
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+
+volumes:
+  pgdata:
+
