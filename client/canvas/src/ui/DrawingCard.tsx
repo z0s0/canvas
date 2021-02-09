@@ -1,5 +1,7 @@
 import React, { CSSProperties } from 'react'
 import { Drawing, Matrix, Rectangle, Flood} from '../lib/types'
+import {Table, Card, Divider} from 'antd'
+import {ColumnsType} from 'antd/es/table'
 
 interface Props {
     drawing: Drawing
@@ -7,19 +9,30 @@ interface Props {
 
 // passing array index to component key prop is a bad idea, but rectangles are not globally identifiable for simplicity
 export default ({drawing}: Props): React.FunctionComponentElement<Props> => 
-  <div>
-      <span>ID: {drawing.id}</span>
+  <Card>
     
-      {
-          drawing.rectangles.map((rectangle, idx) => 
-              <>
-                <span>Rectangle {idx + 1}:</span> <RectangleDefinitionBox key={idx} rectangle={rectangle}/>
-              </>)
-      }
-    
+      <Table
+        title={() => "Rectangles"}
+        dataSource={drawing.rectangles}
+        columns={rectanglesColumns}
+        bordered
+        pagination={false}
+      />
+
+      <Divider/>
       <span>Flood:</span> {drawing.flood ? <FloodBox flood={drawing.flood}/> : "null"} 
+      <Divider/>
+      <span>Human readable representation</span>
       <MatrixBox matrix={drawing.matrix}/>
-  </div>
+  </Card>
+
+const rectanglesColumns: ColumnsType<Rectangle> = [
+  {title: "width", dataIndex: "width", key: "width"}, 
+  {title: "height", dataIndex: "height", key: "height"},
+  {title: "Start Coordinate", dataIndex: "coordinates", render: (coordinates) => `(${coordinates[0]}, ${coordinates[1]})`},
+  {title: "Outline", dataIndex: "outlineSymbol", render: sym => sym ? sym : "null"},
+  {title: "Fill", dataIndex: "fillSymbol", render: sym => sym ? sym : "null"}
+]
 
 interface MatrixBoxProps {
     matrix: Matrix<string>
@@ -39,19 +52,6 @@ const MatrixBox = ({matrix}: MatrixBoxProps): React.FunctionComponentElement<Mat
       </div>
   )
 }
-
-interface RectangleDefinitionBoxProps {
-  rectangle: Rectangle 
-}
-
-const RectangleDefinitionBox = ({rectangle}: RectangleDefinitionBoxProps): React.FunctionComponentElement<RectangleDefinitionBoxProps> =>
-  <div>
-    <span>Width: {rectangle.width}</span>
-    <span>Height: {rectangle.height}</span>
-    <span>Starts from: x = {rectangle.coordinates[0]}, y = {rectangle.coordinates[1]}</span>
-    <span>Fill symbol: {rectangle.fillSymbol ? rectangle.fillSymbol : "null"}</span>
-    <span>Outline symbol: {rectangle.outlineSymbol ? rectangle.outlineSymbol : "null"}</span>
-  </div>
 
 interface CellProps {
   symbol: string
@@ -76,7 +76,7 @@ interface FloodDefinitionProps {
 }
 
 const FloodBox = ({flood}: FloodDefinitionProps): React.FunctionComponentElement<FloodDefinitionProps> => 
-  <div>
+  <Card style={{marginTop: "2%"}}>
       <span>Fill symbol: {flood.fillSymbol}</span>
       <span>Start from: x = {flood.startCoordinate[0]} y = {flood.startCoordinate[1]}</span>
-  </div>
+  </Card>
