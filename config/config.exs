@@ -8,7 +8,7 @@ config :canvas_app, CanvasApp.Repo,
   password: "postgres",
   hostname: "db"
 
-config :canvas_app, CanvasApp.API.Endpoint, [port: 5001]
+config :canvas_app, CanvasApp.API.Endpoint, [port: 5000]
 
 if File.exists?("config/#{Mix.env()}.exs") do
   import_config "#{Mix.env()}.exs"
