@@ -7,13 +7,13 @@ defmodule CanvasApp.API.ApiContext do
 
   alias CanvasApp.Core.{Drawer, CanvasContext}
   alias CanvasApp.Matrix
+  alias CanvasApp.Model.API.Drawing
 
-  def list_canvases() do
+  def list_drawings() do
     CanvasContext.list()
     |> Enum.map(fn canvas ->
-      canvas
-      |> Drawer.draw()
-      |> Matrix.to_list_of_lists()
+      matrix = canvas |> Drawer.draw() |> Matrix.to_list_of_lists()
+      Drawing.from_canvas(canvas, matrix)
     end)
   end
 end

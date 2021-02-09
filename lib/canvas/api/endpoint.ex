@@ -8,8 +8,8 @@ defmodule CanvasApp.API.Endpoint do
   alias CanvasApp.API.ApiContext, as: Service
 
   # list of already rendered canvases
-  get "/canvases" do
-    payload = Service.list_canvases()
+  get "/drawings" do
+    payload = Service.list_drawings()
 
     send_resp(conn, 200, Jason.encode!(payload))
   end
